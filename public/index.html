@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>炫彩云音解析 (Pages 版)</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+SC:wght@300;500;700&display=swap" rel="stylesheet">
+  <title>网易云音乐解析</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+SC:wght@300;500;700&display=swap"
+    rel="stylesheet">
   <style>
     :root {
       --primary: #9d4edd;
@@ -14,9 +17,13 @@
       --glass-border: rgba(255, 255, 255, 0.1);
       --text: #ffffff;
     }
-    
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       font-family: 'Noto Sans SC', sans-serif;
       min-height: 100vh;
@@ -30,7 +37,7 @@
       overflow-x: hidden;
       position: relative;
     }
-    
+
     .blob {
       position: fixed;
       border-radius: 50%;
@@ -39,13 +46,41 @@
       opacity: 0.6;
       animation: float 10s infinite ease-in-out alternate;
     }
-    .blob-1 { width: 400px; height: 400px; background: var(--primary); top: -100px; left: -100px; }
-    .blob-2 { width: 500px; height: 500px; background: var(--secondary); bottom: -150px; right: -100px; animation-delay: -5s; }
-    .blob-3 { width: 300px; height: 300px; background: var(--tertiary); bottom: 20%; left: 10%; animation-delay: -2s; }
+
+    .blob-1 {
+      width: 400px;
+      height: 400px;
+      background: var(--primary);
+      top: -100px;
+      left: -100px;
+    }
+
+    .blob-2 {
+      width: 500px;
+      height: 500px;
+      background: var(--secondary);
+      bottom: -150px;
+      right: -100px;
+      animation-delay: -5s;
+    }
+
+    .blob-3 {
+      width: 300px;
+      height: 300px;
+      background: var(--tertiary);
+      bottom: 20%;
+      left: 10%;
+      animation-delay: -2s;
+    }
 
     @keyframes float {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(30px, 30px) scale(1.1); }
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      100% {
+        transform: translate(30px, 30px) scale(1.1);
+      }
     }
 
     .container {
@@ -64,8 +99,15 @@
     }
 
     @keyframes slideUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     h1 {
@@ -79,7 +121,7 @@
       -webkit-text-fill-color: transparent;
       letter-spacing: 2px;
     }
-    
+
     .subtitle {
       text-align: center;
       color: rgba(255, 255, 255, 0.7);
@@ -95,8 +137,8 @@
     }
 
     .tab-btn {
-      background: rgba(0,0,0,0.2);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       color: white;
       padding: 10px 24px;
       border-radius: 25px;
@@ -114,17 +156,20 @@
     .search-box {
       display: flex;
       gap: 10px;
-      background: rgba(0,0,0,0.2);
+      background: rgba(0, 0, 0, 0.2);
       border-radius: 12px;
       padding: 8px;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       transition: border-color 0.3s;
     }
+
     .search-box:focus-within {
       border-color: var(--tertiary);
       box-shadow: 0 0 15px rgba(58, 134, 255, 0.4);
     }
-    input, select {
+
+    input,
+    select {
       flex: 1;
       background: transparent;
       border: none;
@@ -134,8 +179,17 @@
       outline: none;
       font-family: inherit;
     }
-    select option { background: #24243e; color: white; }
-    select { flex: 0 0 130px; border-right: 1px solid rgba(255,255,255,0.1); cursor: pointer; }
+
+    select option {
+      background: #24243e;
+      color: white;
+    }
+
+    select {
+      flex: 0 0 130px;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+    }
 
     button.primary-btn {
       background: linear-gradient(135deg, #9d4edd, #ff006e);
@@ -149,59 +203,127 @@
       transition: all 0.3s ease;
       font-family: inherit;
     }
+
     button.primary-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(255, 0, 110, 0.4);
     }
+
     button:disabled {
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.1);
       cursor: not-allowed;
       transform: none;
       box-shadow: none;
     }
 
-    #loading { display: none; text-align: center; margin: 2rem 0; }
+    #loading {
+      display: none;
+      text-align: center;
+      margin: 2rem 0;
+    }
+
     .spinner {
-      width: 40px; height: 40px;
-      border: 4px solid rgba(255,255,255,0.1);
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(255, 255, 255, 0.1);
       border-top-color: var(--secondary);
       border-radius: 50%;
       animation: spin 1s linear infinite;
       margin: 0 auto;
     }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
 
-    #message { text-align: center; margin-top: 1rem; min-height: 24px; color: #ff4d4f; }
+    @keyframes spin {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    #message {
+      text-align: center;
+      margin-top: 1rem;
+      min-height: 24px;
+      color: #ff4d4f;
+    }
 
     /* Results */
-    #result-single, #result-playlist { display: none; margin-top: 2rem; animation: fadeIn 0.5s; }
+    #result-single,
+    #result-playlist {
+      display: none;
+      margin-top: 2rem;
+      animation: fadeIn 0.5s;
+    }
+
     @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
 
     /* Single Song Card */
     .song-card {
-      background: rgba(0,0,0,0.3);
+      background: rgba(0, 0, 0, 0.3);
       border-radius: 16px;
       padding: 1.5rem;
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
-      border: 1px solid rgba(255,255,255,0.05);
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
-    .song-details { display: flex; gap: 1.5rem; align-items: center; }
+
+    .song-details {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
     .cover {
-      width: 120px; height: 120px;
-      border-radius: 12px; object-fit: cover;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      width: 120px;
+      height: 120px;
+      border-radius: 12px;
+      object-fit: cover;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     }
-    .info { flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
-    .info h3 { font-size: 1.5rem; }
-    .info p { color: rgba(255,255,255,0.7); font-size: 0.95rem; }
-    .tags { display: flex; gap: 8px; margin-top: 5px; }
-    .tag { background: rgba(255,255,255,0.1); padding: 3px 10px; border-radius: 20px; font-size: 0.8rem; }
-    .audio-player { width: 100%; margin-top: 1rem; border-radius: 8px; }
+
+    .info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .info h3 {
+      font-size: 1.5rem;
+    }
+
+    .info p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.95rem;
+    }
+
+    .tags {
+      display: flex;
+      gap: 8px;
+      margin-top: 5px;
+    }
+
+    .tag {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+    }
+
+    .audio-player {
+      width: 100%;
+      margin-top: 1rem;
+      border-radius: 8px;
+    }
 
     /* Playlist Table */
     .playlist-header {
@@ -210,57 +332,123 @@
       align-items: center;
       margin-bottom: 2rem;
       padding: 1.5rem;
-      background: rgba(0,0,0,0.3);
+      background: rgba(0, 0, 0, 0.3);
       border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.05);
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
+
     .playlist-header img {
-      width: 150px; height: 150px;
+      width: 150px;
+      height: 150px;
       border-radius: 12px;
       object-fit: cover;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     }
-    
+
     .playlist-list {
       max-height: 500px;
       overflow-y: auto;
       border-radius: 12px;
-      background: rgba(0,0,0,0.2);
-      border: 1px solid rgba(255,255,255,0.05);
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
-    
-    .playlist-list::-webkit-scrollbar { width: 8px; }
-    .playlist-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
-    .playlist-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+
+    .playlist-list::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .playlist-list::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    .playlist-list::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
 
     .track-item {
       display: flex;
       align-items: center;
       padding: 12px 1rem;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       transition: background 0.3s;
     }
-    .track-item:hover { background: rgba(255,255,255,0.05); }
-    .track-index { width: 40px; color: rgba(255,255,255,0.5); font-family: monospace; }
-    .track-info { flex: 1; display: flex; flex-direction: column; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; padding-right: 15px; }
-    .track-name { font-weight: 500; font-size: 1.05rem; overflow: hidden; text-overflow: ellipsis; }
-    .track-artist { font-size: 0.85rem; color: rgba(255,255,255,0.6); overflow: hidden; text-overflow: ellipsis; margin-top: 4px;}
+
+    .track-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .track-index {
+      width: 40px;
+      color: rgba(255, 255, 255, 0.5);
+      font-family: monospace;
+    }
+
+    .track-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      padding-right: 15px;
+    }
+
+    .track-name {
+      font-weight: 500;
+      font-size: 1.05rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .track-artist {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.6);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 4px;
+    }
+
     .track-act button {
       background: linear-gradient(135deg, #3a86ff, #00f2fe);
-      color: white; border: none; padding: 6px 14px;
-      border-radius: 6px; cursor: pointer;
-      font-size: 0.9rem; transition: transform 0.2s;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: transform 0.2s;
     }
-    .track-act button:hover { transform: scale(1.05); }
-    .track-act button:disabled { background: gray; cursor: not-allowed; transform: none; }
+
+    .track-act button:hover {
+      transform: scale(1.05);
+    }
+
+    .track-act button:disabled {
+      background: gray;
+      cursor: not-allowed;
+      transform: none;
+    }
 
     @media (max-width: 600px) {
-      .search-box { flex-direction: column; }
-      select { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); }
-      .song-details, .playlist-header { flex-direction: column; text-align: center; }
+      .search-box {
+        flex-direction: column;
+      }
+
+      select {
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .song-details,
+      .playlist-header {
+        flex-direction: column;
+        text-align: center;
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="blob blob-1"></div>
   <div class="blob blob-2"></div>
@@ -288,7 +476,7 @@
         <button class="primary-btn" id="searchBtn" onclick="resolveTarget()">开始解析</button>
       </div>
     </div>
-    
+
     <div id="message"></div>
 
     <div id="loading">
@@ -312,7 +500,8 @@
           </div>
         </div>
         <audio id="s-audio" controls class="audio-player"></audio>
-        <button class="primary-btn" onclick="directDownloadSingle()" style="width:100%; background: linear-gradient(135deg, #3a86ff, #00f2fe);">极速下载</button>
+        <button class="primary-btn" onclick="directDownloadSingle()"
+          style="width:100%; background: linear-gradient(135deg, #3a86ff, #00f2fe);">极速下载</button>
       </div>
     </div>
 
@@ -329,7 +518,8 @@
             <span class="tag" id="p-playcount">0 次播放</span>
           </div>
           <div style="margin-top: 15px;">
-            <button id="batchDownloadBtn" class="primary-btn" onclick="downloadWholePlaylist()" style="padding: 8px 15px; font-size: 0.9rem; background: linear-gradient(135deg, #3a86ff, #00f2fe);">
+            <button id="batchDownloadBtn" class="primary-btn" onclick="downloadWholePlaylist()"
+              style="padding: 8px 15px; font-size: 0.9rem; background: linear-gradient(135deg, #3a86ff, #00f2fe);">
               一键下载全部 (<span id="p-download-progress">等待</span>)
             </button>
           </div>
@@ -358,7 +548,7 @@
       document.getElementById('tab-single').classList.toggle('active', mode === 'single');
       document.getElementById('tab-playlist').classList.toggle('active', mode === 'playlist');
       document.getElementById('targetId').placeholder = mode === 'single' ? "粘贴单曲链接或单纯数字ID" : "粘贴歌单链接或单纯数字ID";
-      
+
       msg.innerText = '';
       document.getElementById('result-single').style.display = 'none';
       document.getElementById('result-playlist').style.display = 'none';
@@ -374,7 +564,7 @@
     async function resolveTarget() {
       const input = document.getElementById('targetId').value;
       const targetId = extractId(input);
-      
+
       msg.innerText = '';
       document.getElementById('result-single').style.display = 'none';
       document.getElementById('result-playlist').style.display = 'none';
@@ -409,9 +599,9 @@
       });
       const infoData = await infoRes.json();
       if (!infoData.data) throw new Error(infoData.message || '获取单曲信息失败');
-      
+
       const song = infoData.data;
-      
+
       const urlRes = await fetch('/api/getSongUrl', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -465,8 +655,8 @@
       songs.forEach((song, index) => {
         const item = document.createElement('div');
         item.className = 'track-item';
-        const artist = song.singer || (song.ar && song.ar.map(a=>a.name).join('/')) || '未知';
-        
+        const artist = song.singer || (song.ar && song.ar.map(a => a.name).join('/')) || '未知';
+
         item.innerHTML = `
           <div class="track-index">${index + 1}</div>
           <div class="track-info">
@@ -517,9 +707,9 @@
           body: JSON.stringify({ id: trackId, level: qualitySelect.value })
         });
         const urlData = await urlRes.json();
-        
+
         if (!urlData.data || !urlData.data.url) throw new Error('解析或版权限制');
-        
+
         btn.innerText = '拉取中...';
         triggerDownloadProxy(urlData.data.url, name, artist);
         setTimeout(() => {
@@ -532,10 +722,10 @@
         alert("下载失败: " + err.message);
       } finally {
         setTimeout(() => {
-          if(btn.innerText !== '✓ 完成') {
-             btn.disabled = false;
-             btn.innerText = originalText;
-             btn.style.background = '';
+          if (btn.innerText !== '✓ 完成') {
+            btn.disabled = false;
+            btn.innerText = originalText;
+            btn.style.background = '';
           }
         }, 3000);
       }
@@ -544,27 +734,27 @@
     async function downloadWholePlaylist() {
       if (isBatchDownloading) return;
       if (!currentPlaylistSongs || currentPlaylistSongs.length === 0) return;
-      
+
       const btn = document.getElementById('batchDownloadBtn');
       const progressText = document.getElementById('p-download-progress');
       isBatchDownloading = true;
       btn.style.background = 'gray';
-      
+
       for (let i = 0; i < currentPlaylistSongs.length; i++) {
         const song = currentPlaylistSongs[i];
-        const artist = song.singer || (song.ar && song.ar.map(a=>a.name).join('/')) || '未知';
-        
-        progressText.innerText = `正在下载 ${i+1}/${currentPlaylistSongs.length}`;
-        
+        const artist = song.singer || (song.ar && song.ar.map(a => a.name).join('/')) || '未知';
+
+        progressText.innerText = `正在下载 ${i + 1}/${currentPlaylistSongs.length}`;
+
         try {
           await downloadTrack(song.id, song.name, artist);
           // 延迟避免并发请求过多导致拦截或浏览器限制下载
           await new Promise(r => setTimeout(r, 1200));
-        } catch(e) {
+        } catch (e) {
           console.error("下载失败", song.name, e);
         }
       }
-      
+
       progressText.innerText = '完成!';
       btn.style.background = 'linear-gradient(135deg, #3a86ff, #00f2fe)';
       isBatchDownloading = false;
@@ -577,4 +767,5 @@
     });
   </script>
 </body>
+
 </html>
