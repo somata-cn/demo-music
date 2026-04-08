@@ -1,10 +1,10 @@
 {
-  "name": "nextmusic-cf",
+  "name": "netease-music-pages",
   "version": "1.0.0",
-  "description": "High Aesthetic Netease Music Downloader for Cloudflare Pages",
+  "description": "Netease music resolver for Cloudflare Pages Functions",
   "private": true,
   "scripts": {
-    "dev": "wrangler pages dev public",
+    "dev": "wrangler pages dev public --port 9001",
     "deploy": "wrangler pages deploy public"
   },
   "devDependencies": {
