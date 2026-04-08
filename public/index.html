@@ -568,7 +568,7 @@
             </label>
             <button id="batchDownloadBtn" class="primary-btn" onclick="downloadWholePlaylist()"
               style="padding: 8px 15px; font-size: 0.9rem; background: linear-gradient(135deg, #3a86ff, #00f2fe);">
-              一键下载全部 (<span id="p-download-progress">等待</span>)
+              一键下载全部
             </button>
           </div>
         </div>
@@ -755,7 +755,8 @@
       }
     }
 
-    async function downloadTrack(trackId, name, artist) {
+    async function downloadTrack(trackId, name, artist, options = {}) {
+      const { silent = false } = options;
       const btn = document.getElementById(`btn-${trackId}`);
       const originalText = btn.innerText;
       btn.innerText = '解析中...';
@@ -780,7 +781,10 @@
       } catch (err) {
         btn.innerText = '✗ 失败';
         btn.style.background = '#ff006e';
-        alert("下载失败: " + err.message);
+        if (!silent) {
+          msg.style.color = '#ff4d4f';
+          msg.innerText = `下载失败: ${name}，${err.message}`;
+        }
       } finally {
         setTimeout(() => {
           if (btn.innerText !== '✓ 完成') {
@@ -811,7 +815,7 @@
           progressText.innerText = `正在下载 ${i + 1}/${currentPlaylistSongs.length}`;
 
           try {
-            await downloadTrack(song.id, song.name, artist);
+            await downloadTrack(song.id, song.name, artist, { silent: true });
             // 延迟避免并发请求过多导致拦截或浏览器限制下载
             if (delayMs > 0 && i < currentPlaylistSongs.length - 1) {
               progressText.innerText = `等待 ${delayMs}ms`;
