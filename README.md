@@ -1,38 +1,31 @@
-# Netease Music Pages
+# Music
 
-极简 Cloudflare Pages 网易云解析页。
+网易云音乐解析工具，部署在 Cloudflare Pages。
 
-保留能力：
+## 文件结构
 
-- 单曲解析
-- 歌单解析
-- 单曲下载
-- 歌单批量下载
-
-## 结构
-
-```text
+```
 public/
-  index.html
-  app.js
-  styles.css
+├── index.html          # HTML 结构
+├── css/style.css       # 样式
+├── js/
+│   ├── md5.js          # MD5 实现
+│   ├── utils.js        # 工具函数
+│   ├── api.js          # API 认证与请求
+│   └── app.js          # UI 交互与下载逻辑
 functions/
-  api/[[route]].js
-  download.js
+└── download.js         # 音频下载代理
 ```
 
-## 本地运行
+## 使用
 
 ```bash
 npm install
-npm run dev
+npm run dev     # 本地开发 http://localhost:9001
+npm run deploy  # 部署到 Cloudflare Pages
 ```
 
-访问 `http://localhost:9001`。
+## 说明
 
-## 命令
-
-```bash
-npm run dev
-npm run deploy
-```
+- 前端直接请求 `nextmusic.toubiec.cn` 的 API，无需后端代理
+- 仅保留 `/download` 函数用于转发音频下载（规避防盗链）

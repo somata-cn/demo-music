@@ -1,20 +1,5 @@
-# Dependencies
 node_modules/
-
-# Local Cloudflare/Wrangler state
 .wrangler/
-.dev.vars
-.dev.vars.*
-
-# Local environment files
-.env
-.env.*
-
-# Editor/history artifacts
 .history/
-.DS_Store
-
-# Build/test outputs
-dist/
-coverage/
+.claude/
 *.log
