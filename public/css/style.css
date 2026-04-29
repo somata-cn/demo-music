@@ -95,6 +95,20 @@ button:disabled { opacity: .5 }
 #message { margin-top: 12px; color: #666 }
 #message.ok { color: #0a7a43 }
 #message.err { color: #c0392b }
+.api-status {
+  margin-top: 4px;
+  color: #666;
+  font-size: 14px;
+}
+.api-status.ok { color: #0a7a43 }
+.api-status.err { color: #c0392b }
+.api-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(96px, auto);
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
 #progress { color: #666 }
 #singleTitle,
 #playlistTitle {
@@ -113,6 +127,7 @@ button:disabled { opacity: .5 }
   .form { grid-template-columns: 1fr }
   .single { grid-template-columns: 1fr }
   .batch { grid-template-columns: 1fr }
+  .api-panel { grid-template-columns: 1fr }
   img {
     max-width: 240px;
     justify-self: center;

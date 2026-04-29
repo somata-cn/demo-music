@@ -13,8 +13,6 @@ public/
 │   ├── utils.js        # 工具函数
 │   ├── api.js          # API 认证与请求
 │   └── app.js          # UI 交互与下载逻辑
-functions/
-└── download.js         # 音频下载代理
 ```
 
 ## 使用
@@ -27,5 +25,5 @@ npm run deploy  # 部署到 Cloudflare Pages
 
 ## 说明
 
-- 前端直接请求 `nextmusic.toubiec.cn` 的 API，无需后端代理
-- 仅保留 `/download` 函数用于转发音频下载（规避防盗链）
+- 前端内置多个音乐 API 候选源，启动时会检查可用性，可手动选择当前使用的接口
+- 下载逻辑在前端完成：优先使用 Blob 下载，跨域失败时退回直接链接下载

@@ -7,6 +7,12 @@ function setMessage(text, type) {
   el.message.className = type || ''
 }
 
+function setApiStatus(text, type) {
+  if (!el.apiStatus) return
+  el.apiStatus.textContent = text
+  el.apiStatus.className = 'api-status ' + (type || '')
+}
+
 // HTML 转义
 function escapeHtml(str) {
   const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }

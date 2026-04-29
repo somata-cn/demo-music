@@ -6,6 +6,10 @@ const el = {
   target:  $('target'),
   submit:  $('submit'),
   message: $('message'),
+  apiStatus: $('apiStatus'),
+  apiPanel: $('apiPanel'),
+  apiProvider: $('apiProvider'),
+  apiRefresh: $('apiRefresh'),
   loading: $('loading'),
 
   single:   $('singleCard'),
@@ -31,9 +35,17 @@ let state = { song: null, tracks: [] }
 
 // 初始化认证 -------------------------------------------------------------
 
-authenticate().catch(err => {
+el.submit.disabled = true
+setApiStatus('接口检查中...')
+
+authenticate().then(status => {
+  el.submit.disabled = false
+  renderApiProviders(status)
+}).catch(err => {
   el.submit.disabled = true
   setMessage('认证失败: ' + err.message, 'err')
+  setApiStatus('接口不可用', 'err')
+  renderApiProviders(getApiStatus())
 })
 
 // 事件绑定 ----------------------------------------------------------------
@@ -47,13 +59,48 @@ el.mode.onchange = () => {
   el.message.textContent = ''
 }
 
-el.download.onclick = () => {
-  if (state.song) {
-    triggerDownload(state.song.url, state.song.name, state.song.artist)
+el.download.onclick = async () => {
+  if (state.song?.url) {
+    el.download.disabled = true
+    try {
+      await triggerDownload(state.song.url, state.song.name, state.song.artist)
+      setMessage('已开始下载', 'ok')
+    } catch (err) {
+      setMessage('下载失败: ' + err.message, 'err')
+    } finally {
+      el.download.disabled = false
+    }
   }
 }
 
 el.batchDl.onclick = batchDownload
+
+el.apiProvider.onchange = () => {
+  try {
+    const status = selectApiProvider(el.apiProvider.value)
+    renderApiProviders(status)
+  } catch (err) {
+    setApiStatus(err.message, 'err')
+  }
+}
+
+el.apiRefresh.onclick = async () => {
+  el.submit.disabled = true
+  el.apiRefresh.disabled = true
+  setApiStatus('接口检查中...')
+
+  try {
+    const status = await authenticate()
+    renderApiProviders(status)
+    el.submit.disabled = false
+  } catch (err) {
+    setMessage('认证失败: ' + err.message, 'err')
+    setApiStatus('接口不可用', 'err')
+    renderApiProviders(getApiStatus())
+  } finally {
+    el.apiRefresh.disabled = false
+  }
+}
 
 // 曲目列表中单个下载按钮
 el.tracks.onclick = async e => {
@@ -65,7 +112,7 @@ el.tracks.onclick = async e => {
   try {
     const res = await api('getSongUrl', { id: song.id, level: el.quality.value })
     if (!res.data?.url) throw new Error('无下载地址')
-    triggerDownload(res.data.url, song.name, artistOf(song))
+    await triggerDownload(res.data.url, song.name, artistOf(song))
     btn.textContent = '已开始'
     await new Promise(r => setTimeout(r, 800))
   } catch (err) {
@@ -168,7 +215,7 @@ async function batchDownload() {
 
         const res = await api('getSongUrl', { id: song.id, level: el.quality.value })
         if (res.data?.url) {
-          triggerDownload(res.data.url, song.name, artistOf(song))
+          await triggerDownload(res.data.url, song.name, artistOf(song))
           if (btn) btn.textContent = '已开始'
         }
         if (btn) { btn.textContent = '下载'; btn.disabled = false }
@@ -188,13 +235,64 @@ async function batchDownload() {
 
 // 下载触发 ----------------------------------------------------------------
 
-function triggerDownload(url, name, artist) {
-  const ext = url.match(/\.(flac|m4a)/)?.[0] || '.mp3'
-  const filename = (artist || '?') + ' - ' + (name || '?') + ext
+async function triggerDownload(url, name, artist) {
+  if (!url) throw new Error('无下载地址')
+
+  const ext = getAudioExt(url)
+  const filename = safeFilename((artist || '?') + ' - ' + (name || '?') + ext)
+
+  try {
+    const res = await fetch(url)
+    if (!res.ok) throw new Error('音频请求失败')
+
+    const blob = await res.blob()
+    const objectUrl = URL.createObjectURL(blob)
+    clickDownload(objectUrl, filename)
+    setTimeout(() => URL.revokeObjectURL(objectUrl), 30000)
+  } catch (err) {
+    clickDownload(url, filename)
+  }
+}
+
+function clickDownload(url, filename) {
   const a = document.createElement('a')
-  a.href = '/download?url=' + encodeURIComponent(url) + '&name=' + encodeURIComponent(filename)
+  a.href = url
   a.download = filename
+  a.rel = 'noopener'
   document.body.append(a)
   a.click()
   a.remove()
+}
+
+function getAudioExt(url) {
+  try {
+    const pathname = new URL(url).pathname
+    return pathname.match(/\.(flac|m4a|mp3|wav|aac|ogg)$/i)?.[0] || '.mp3'
+  } catch {
+    return url.match(/\.(flac|m4a|mp3|wav|aac|ogg)(?=$|[?#])/i)?.[0] || '.mp3'
+  }
+}
+
+function safeFilename(filename) {
+  return filename.replace(/[\\/:*?"<>|]+/g, '_')
+}
+
+function renderApiProviders(status) {
+  if (!status?.list?.length) return
+
+  el.apiPanel.hidden = false
+  el.apiProvider.innerHTML = status.list.map(item => {
+    const label = item.ok ? '可用' : '不可用'
+    const reason = item.ok ? '' : ' - ' + escapeHtml(item.error || '检查失败')
+    const selected = status.active?.base === item.provider.base ? ' selected' : ''
+    const disabled = item.ok ? '' : ' disabled'
+
+    return `<option value="${escapeHtml(item.provider.base)}"${selected}${disabled}>${escapeHtml(item.provider.name)} · ${label}${reason}</option>`
+  }).join('')
+
+  if (status.active) {
+    setApiStatus('当前接口: ' + status.active.name + ' (' + status.available + '/' + status.total + ' 可用)', 'ok')
+  } else {
+    setApiStatus('接口不可用', 'err')
+  }
 }
